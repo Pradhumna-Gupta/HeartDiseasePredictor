@@ -10,10 +10,8 @@ Original file is located at
 import tensorflow as tf
 import pandas as pd
 import numpy as np
-from google.colab import drive
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler
-drive.mount('/content/drive')
 
 path = 'data/Heart_Disease_Prediction.csv'
 Db = pd.read_csv(path)
