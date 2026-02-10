@@ -43,14 +43,6 @@ model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0003), loss='bi
 history = model.fit(X_train_, Y_train_, epochs=20,batch_size=16, validation_data=(X_train_val, Y_train_val))
 model.evaluate(X_test, Y_test, verbose=2)
 
-"""
-import seaborn as sns
-plt.figure(figsize=(4,8))
-corr = Db.corr()[['Heart Disease']].sort_values(by='Heart Disease', ascending=False)
-sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".2f")
-plt.title('Feature Correlation with Target')
-plt.show()
-
 import matplotlib.pyplot as plt
 plt.plot(history.history['accuracy'],label='train_accuracy')
 plt.plot(history.history['val_accuracy'],label='val_accuracy')
@@ -83,69 +75,3 @@ plt.ylabel('Actual')
 plt.title('Heart Disease Confusion Matrix')
 plt.show()
 
-import numpy as np
-from sklearn.metrics import accuracy_score
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-def get_manual_permutation_importance(model, X, y, scaler, feature_names):
-    y_pred_probs = model.predict(X, verbose=0)
-    y_pred = (y_pred_probs > 0.5).astype(int)
-    baseline_accuracy = accuracy_score(y, y_pred)
-
-    importances = []
-    for i in range(len(feature_names)):
-        X_temp = X.copy()
-        for _ in range(20):
-            X_temp[:, i] = np.random.permutation(X_temp[:, i])
-
-        y_scrambled_probs = model.predict(X_temp, verbose=0)
-        y_scrambled_pred = (y_scrambled_probs > 0.5).astype(int)
-
-        scrambled_accuracy = accuracy_score(y, y_scrambled_pred)
-        importances.append(baseline_accuracy - scrambled_accuracy)
-
-    return np.array(importances)
-
-names = Db.drop('Heart Disease', axis=1).columns # Or wherever you kept your feature names
-
-importance = get_manual_permutation_importance(model, X_test, Y_test, scaler, names)
-
-plt.figure(figsize=(10,6))
-sns.barplot(x=importance, y=names)
-plt.title('Feature Importance: Impact on Accuracy')
-plt.xlabel('Decrease in Accuracy when feature is scrambled')
-plt.show()
-
-from sklearn.inspection import permutation_importance
-from scikeras.wrappers import KerasClassifier
-wrapped_model = KerasClassifier(model=model, check_params=False)
-wrapped_model.classes_ = np.array([0, 1])
-results = permutation_importance(wrapped_model, X_test, Y_test, scoring='recall')
-importance = results.importances_mean
-feature_names = X.columns
-
-plt.figure(figsize=(10,6))
-sns.barplot(x=importance, y=feature_names)
-plt.title('Which Features Drive the Prediction?')
-plt.xlabel('Decrease in Recal when feature is removed')
-plt.show()
-
-
-def predict_heart_disease(user_features):
-  raw_data = np.array(user_features).reshape(1, -1)
-  scaled_data = scaler.transform(raw_data)
-  prediction = model.predict(scaled_data, verbose=0)
-  probability = prediction[0][0]
-  if probability > 0.5:
-        return f"Warning: Positive for Disease ({probability*100:.2f}% probability)"
-  else:
-        return f"Results: Negative for Disease ({probability*100:.2f}% probability)"
-
-print("Enter your details")
-l=[]
-for i in range(13):
-  a = input()
-  l.append(a)
-print(predict_heart_disease(l))
-"""
