@@ -43,7 +43,9 @@ model = tf.keras.models.Sequential([
 ])
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0003), loss='binary_crossentropy', metrics=['accuracy'])
 history = model.fit(X_train_, Y_train_, epochs=20,batch_size=16, validation_data=(X_train_val, Y_train_val))
+model.evaluate(X_test, Y_test, verbose=2)
 
+"""
 import seaborn as sns
 plt.figure(figsize=(4,8))
 corr = Db.corr()[['Heart Disease']].sort_values(by='Heart Disease', ascending=False)
@@ -145,7 +147,6 @@ plt.title('Which Features Drive the Prediction?')
 plt.xlabel('Decrease in Recal when feature is removed')
 plt.show()
 
-model.evaluate(X_test, Y_test, verbose=2)
 
 def predict_heart_disease(user_features):
   raw_data = np.array(user_features).reshape(1, -1)
@@ -163,3 +164,4 @@ for i in range(13):
   a = input()
   l.append(a)
 print(predict_heart_disease(l))
+"""
