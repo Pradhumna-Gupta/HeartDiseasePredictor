@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler
 drive.mount('/content/drive')
 
-path = '/content/drive/MyDrive/Heart_Disease_Prediction.csv'
+path = 'data/Heart_Disease_Prediction.csv'
 Db = pd.read_csv(path)
 Db.head()
 
