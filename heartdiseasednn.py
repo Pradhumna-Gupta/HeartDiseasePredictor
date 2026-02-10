@@ -44,7 +44,9 @@ model = tf.keras.models.Sequential([
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0003), loss='binary_crossentropy', metrics=['accuracy'])
 history = model.fit(X_train_, Y_train_, epochs=20,batch_size=16, validation_data=(X_train_val, Y_train_val))
 
-import seaborn as sns
+model.evaluate(X_test, Y_test, verbose=2)
+
+""" import seaborn as sns
 plt.figure(figsize=(4,8))
 corr = Db.corr()[['Heart Disease']].sort_values(by='Heart Disease', ascending=False)
 sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".2f")
@@ -130,23 +132,12 @@ sns.barplot(x=importance, y=names)
 plt.title('Feature Importance: Impact on Accuracy')
 plt.xlabel('Decrease in Accuracy when feature is scrambled')
 plt.show()
+"""
 
-from sklearn.inspection import permutation_importance
-from scikeras.wrappers import KerasClassifier
-wrapped_model = KerasClassifier(model=model, check_params=False)
-wrapped_model.classes_ = np.array([0, 1])
-results = permutation_importance(wrapped_model, X_test, Y_test, scoring='recall')
-importance = results.importances_mean
-feature_names = X.columns
 
-plt.figure(figsize=(10,6))
-sns.barplot(x=importance, y=feature_names)
-plt.title('Which Features Drive the Prediction?')
-plt.xlabel('Decrease in Recal when feature is removed')
-plt.show()
 
-model.evaluate(X_test, Y_test, verbose=2)
 
+"""
 def predict_heart_disease(user_features):
   raw_data = np.array(user_features).reshape(1, -1)
   scaled_data = scaler.transform(raw_data)
@@ -163,3 +154,5 @@ for i in range(13):
   a = input()
   l.append(a)
 print(predict_heart_disease(l))
+
+"""
