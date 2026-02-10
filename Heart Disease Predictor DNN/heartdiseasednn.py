@@ -89,42 +89,28 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 def get_manual_permutation_importance(model, X, y, scaler, feature_names):
-    # 1. Get the baseline Recall
-    # We assume X is already scaled here because it's the test set
     y_pred_probs = model.predict(X, verbose=0)
     y_pred = (y_pred_probs > 0.5).astype(int)
     baseline_accuracy = accuracy_score(y, y_pred)
 
     importances = []
-
-    # 2. Loop through each column by index
     for i in range(len(feature_names)):
         X_temp = X.copy()
-
-        # 3. SCRAMBLE the specific column (index i)
-        # We shuffle the values within that one column
-        # Shuffling 20 times to get a stable "Truth"
         for _ in range(20):
             X_temp[:, i] = np.random.permutation(X_temp[:, i])
 
-
-        # 4. Predict again with the "broken" data
         y_scrambled_probs = model.predict(X_temp, verbose=0)
         y_scrambled_pred = (y_scrambled_probs > 0.5).astype(int)
 
-        # 5. Measure the drop in Recall
         scrambled_accuracy = accuracy_score(y, y_scrambled_pred)
         importances.append(baseline_accuracy - scrambled_accuracy)
 
     return np.array(importances)
 
-# 3. RUN IT
-# Make sure X_test_scaled is your scaled numpy array and original_df.columns is your list of names
 names = Db.drop('Heart Disease', axis=1).columns # Or wherever you kept your feature names
 
 importance = get_manual_permutation_importance(model, X_test, Y_test, scaler, names)
 
-# 4. PLOT
 plt.figure(figsize=(10,6))
 sns.barplot(x=importance, y=names)
 plt.title('Feature Importance: Impact on Accuracy')
