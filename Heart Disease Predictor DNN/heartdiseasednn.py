@@ -22,25 +22,20 @@ Db['Heart Disease']=Db['Heart Disease'].map({'Presence':1,'Absence':0})
 
 X = Db.drop('Heart Disease',axis=1)
 Y = Db['Heart Disease']
-X_train , X_test , Y_train , Y_test = train_test_split(X,Y, test_size=0.2 , random_state = 43)
-X_train_ , X_train_val , Y_train_ , Y_train_val = train_test_split(X_train , Y_train,test_size=0.15,random_state=43)
+X_train , X_test , Y_train , Y_test = train_test_split(X,Y, test_size=0.1 , random_state = 42)
+X_train_ , X_train_val , Y_train_ , Y_train_val = train_test_split(X_train , Y_train,test_size=0.1,random_state=42)
 scaler = RobustScaler()
 X_train_ = scaler.fit_transform(X_train_)
 X_train_val = scaler.transform(X_train_val)
 X_test = scaler.transform(X_test)
 
 model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(100,activation='leaky_relu'),
-    tf.keras.layers.Dropout(0.4),
-    tf.keras.layers.Dense(64,activation='leaky_relu'),
-    tf.keras.layers.Dropout(0.4),
-    tf.keras.layers.Dense(24,activation='leaky_relu'),
-    tf.keras.layers.Dropout(0.4),
-    tf.keras.layers.Dense(8,activation='leaky_relu'),
+    tf.keras.layers.Dense(16,activation='relu'),
+    tf.keras.layers.Dense(8,activation='relu'),
     tf.keras.layers.Dense(1,activation='sigmoid')
 ])
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0003), loss='binary_crossentropy', metrics=['accuracy'])
-history = model.fit(X_train_, Y_train_, epochs=20,batch_size=16, validation_data=(X_train_val, Y_train_val))
+history = model.fit(X_train_, Y_train_, epochs=25,batch_size=16, validation_data=(X_train_val, Y_train_val))
 model.evaluate(X_test, Y_test, verbose=2)
 
 import matplotlib.pyplot as plt
