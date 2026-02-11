@@ -34,7 +34,7 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(8,activation='relu'),
     tf.keras.layers.Dense(1,activation='sigmoid')
 ])
-model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0003), loss='binary_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=tf.keras.optimizers.Adam(), loss='binary_crossentropy', metrics=['accuracy'])
 history = model.fit(X_train_, Y_train_, epochs=25,batch_size=16, validation_data=(X_train_val, Y_train_val))
 model.evaluate(X_test, Y_test, verbose=2)
 
