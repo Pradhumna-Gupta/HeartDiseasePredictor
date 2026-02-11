@@ -24,8 +24,8 @@ else:
 
 Y = df['target']
 
-X_train , X_test , Y_train , Y_test = train_test_split(X,Y, test_size=0.2 , random_state = 43)
-X_train_ , X_train_val , Y_train_ , Y_train_val = train_test_split(X_train , Y_train,test_size=0.15,random_state=43)
+X_train , X_test , Y_train , Y_test = train_test_split(X,Y, test_size=0.1 , random_state = 42)
+X_train_ , X_train_val , Y_train_ , Y_train_val = train_test_split(X_train , Y_train,test_size=0.1,random_state=42)
 X_train_ = scaler.fit_transform(X_train_)
 X_train_val = scaler.transform(X_train_val)
 X_test = scaler.transform(X_test)
